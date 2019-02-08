@@ -13,18 +13,19 @@ using CapaControlador;
 
 namespace CapaVista
 {
-    public partial class FrmCliente : Form
+    public partial class FrmTrabajador : Form
     {
         private bool IsNuevo = false;
         private bool IsEditar = false;
 
-        public FrmCliente()
+        public FrmTrabajador()
         {
             InitializeComponent();
-            this.toolTipMensaje.SetToolTip(this.textBoxNombre, " Ingrese el Nombre del Cliente");
-            this.toolTipMensaje.SetToolTip(this.textBoxApellidos, " Ingrese los Apellidos del Cliente");
-            this.toolTipMensaje.SetToolTip(this.textBoxDireccion, " Ingrese la dirección del Cliente");
-            this.toolTipMensaje.SetToolTip(this.textBoxNumDoc, " Ingrese el número de documento del Cliente");
+            this.toolTipMensaje.SetToolTip(textBoxNombre, "Ingrese el Nombre del Trabajador");
+            this.toolTipMensaje.SetToolTip(textBoxApellidos, "Ingrese el Apellidos del Trabajador");
+            this.toolTipMensaje.SetToolTip(textBoxUsuario, "Ingrese el Usuario para que el Trabajador ingrese al Sistema");
+            this.toolTipMensaje.SetToolTip(textBoxPass, "Ingrese el Password del Trabajador");
+            this.toolTipMensaje.SetToolTip(comboBoxAcceso, "Seleccione el nivel de Acceso del Trabajador");
         }
 
         // Mostrar Mensaje de Confirmación
@@ -43,14 +44,17 @@ namespace CapaVista
 
         private void Limpiar()
         {
+            // Solo dejamos en blanco los textboxes, no los comboboxes
             this.textBoxNombre.Text = string.Empty;
             this.textBoxApellidos.Text = string.Empty;
             this.textBoxNumDoc.Text = string.Empty;
             this.textBoxDireccion.Text = string.Empty;
-            this.textBoxTelefono.Text = string.Empty;          
+            this.textBoxTelefono.Text = string.Empty;
             this.textBoxEmail.Text = string.Empty;
+            this.textBoxUsuario.Text = string.Empty;
+            this.textBoxPass.Text = string.Empty;
 
-            this.textBoxIdCliente.Text = string.Empty;
+            this.textBoxIdTrabajador.Text = string.Empty;
         }
 
         // Habilitar los controles del formulario
@@ -61,11 +65,15 @@ namespace CapaVista
             this.textBoxApellidos.ReadOnly = !valor;
             this.textBoxDireccion.ReadOnly = !valor;
             this.textBoxNumDoc.ReadOnly = !valor;
-            this.textBoxTelefono.ReadOnly = !valor;          
+            this.textBoxTelefono.ReadOnly = !valor;
             this.textBoxEmail.ReadOnly = !valor;
-            this.textBoxIdCliente.ReadOnly = !valor;
+            this.textBoxUsuario.ReadOnly = !valor;
+            this.textBoxPass.ReadOnly = !valor;
 
-            this.comboBoxTipoDoc.Enabled = valor;            
+            this.textBoxIdTrabajador.ReadOnly = !valor;
+            
+            this.comboBoxSexo.Enabled = valor;
+            this.comboBoxAcceso.Enabled = valor;
         }
 
         // Habilitar los botones 
@@ -90,17 +98,17 @@ namespace CapaVista
         }
 
         // Método para ocultar columnas, hacer el select del procedimiento mostrarcliente SQL Server
-        // Para ver las Columnas, que serían al final: 0 Eliminar, 1 idcliente, 2 nombre
+        // Para ver las Columnas, que serían al final: 0 Eliminar, 1 idtrabajador, 2 nombre
         private void OcultarColumnas()
         {
             this.dataGridViewListado.Columns[0].Visible = false; // Columna Eliminar
-            this.dataGridViewListado.Columns[1].Visible = false; // Columna idcliente
+            this.dataGridViewListado.Columns[1].Visible = false; // Columna idtrabajador
         }
 
         // Método Mostrar 
         private void Mostrar()
         {
-            this.dataGridViewListado.DataSource = CCliente.Mostrar();
+            this.dataGridViewListado.DataSource = CapaControlador.CTrabajador.Mostrar();
             this.OcultarColumnas();
             labelTotal.Text = "Total de Registros: " + dataGridViewListado.Rows.Count;
         }
@@ -108,7 +116,7 @@ namespace CapaVista
         // Método BuscarApellidos
         private void BuscarApellidos()
         {
-            this.dataGridViewListado.DataSource = CCliente.BuscarApellidos(textBoxBuscar.Text);
+            this.dataGridViewListado.DataSource = CTrabajador.BuscarApellidos(textBoxBuscar.Text);
             this.OcultarColumnas();
             labelTotal.Text = "Total de Registros: " + dataGridViewListado.Rows.Count;
         }
@@ -116,12 +124,12 @@ namespace CapaVista
         // Método BuscarNum_Documento
         private void BuscarNum_Documento()
         {
-            this.dataGridViewListado.DataSource = CCliente.BuscarNum_Documento(textBoxBuscar.Text);
+            this.dataGridViewListado.DataSource = CTrabajador.BuscarNum_Documento(textBoxBuscar.Text);
             this.OcultarColumnas();
             labelTotal.Text = "Total de Registros: " + dataGridViewListado.Rows.Count;
         }
 
-        private void FrmCliente_Load(object sender, EventArgs e)
+        private void FrmTrabajador_Load(object sender, EventArgs e)
         {
             this.Top = 0;
             this.Left = 0;
@@ -131,13 +139,13 @@ namespace CapaVista
 
         private void buttonBuscar_Click(object sender, EventArgs e)
         {
-            if (comboBoxBuscar.Text.Equals("Apellidos"))
-            {
-                this.BuscarApellidos();
-            }
-            else if (comboBoxBuscar.Text.Equals("Documento"))
+            if (comboBoxBuscar.Text.Equals("Documento"))
             {
                 this.BuscarNum_Documento();
+            }
+            else if (comboBoxBuscar.Text.Equals("Apellidos"))
+            {
+                this.BuscarApellidos();
             }
         }
 
@@ -158,7 +166,7 @@ namespace CapaVista
                         if (Convert.ToBoolean(row.Cells[0].Value))
                         {
                             Codigo = Convert.ToString(row.Cells[1].Value);
-                            Rpta = CCliente.Eliminar(Convert.ToInt32(Codigo));
+                            Rpta = CTrabajador.Eliminar(Convert.ToInt32(Codigo));
 
                             if (Rpta.Equals("OK"))
                             {
@@ -178,7 +186,7 @@ namespace CapaVista
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
-        // Muestra/Oculta columna de checkboxes eliminar del datagridview
+
         private void checkBoxEliminar_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxEliminar.Checked) // Check marcado
@@ -202,16 +210,19 @@ namespace CapaVista
 
         private void dataGridViewListado_DoubleClick(object sender, EventArgs e)
         {
-            this.textBoxIdCliente.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["idcliente"].Value);
-            this.textBoxNombre.Text = this.dataGridViewListado.CurrentRow.Cells["nombre"].Value.ToString();
-            this.textBoxApellidos.Text = this.dataGridViewListado.CurrentRow.Cells["apellidos"].Value.ToString();
+            this.textBoxIdTrabajador.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["idtrabajador"].Value);
+            this.textBoxNombre.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["nombre"].Value);
+            this.textBoxApellidos.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["apellidos"].Value);
             this.comboBoxSexo.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["sexo"].Value);
-            this.dateTimePickerFechaN.Value = Convert.ToDateTime(this.dataGridViewListado.CurrentRow.Cells["fecha_nacimiento"].Value);
-            this.comboBoxTipoDoc.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["tipo_documento"].Value);
-            this.textBoxNumDoc.Text = this.dataGridViewListado.CurrentRow.Cells["num_documento"].Value.ToString();
-            this.textBoxDireccion.Text = this.dataGridViewListado.CurrentRow.Cells["direccion"].Value.ToString();
-            this.textBoxTelefono.Text = this.dataGridViewListado.CurrentRow.Cells["telefono"].Value.ToString();
-            this.textBoxEmail.Text = this.dataGridViewListado.CurrentRow.Cells["email"].Value.ToString();            
+            this.dateTimePickerFechaN.Value = Convert.ToDateTime(this.dataGridViewListado.CurrentRow.Cells["fecha_nac"].Value);
+            
+            this.textBoxNumDoc.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["num_documento"].Value);
+            this.textBoxDireccion.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["direccion"].Value);
+            this.textBoxTelefono.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["telefono"].Value);
+            this.textBoxEmail.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["email"].Value);
+            this.comboBoxAcceso.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["acceso"].Value);
+            this.textBoxUsuario.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["usuario"].Value);
+            this.textBoxPass.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["password"].Value);
 
             this.tabControl1.SelectedIndex = 1; // tab Mantenimiento
         }
@@ -220,9 +231,18 @@ namespace CapaVista
         {
             this.IsNuevo = true;
             this.IsEditar = false;
-            this.Botones();
+            this.Botones(); // <- Ya hace hablilitar()
             this.Limpiar();
             this.textBoxNombre.Focus();
+        }
+
+        private void buttonCancelar_Click(object sender, EventArgs e)
+        {
+            this.IsNuevo = false;
+            this.IsEditar = false;
+            this.Botones();
+            this.Limpiar(); // <- Ya hace textBoxIdTrabajador.Text = string.Empty;
+            errorProviderIcono.Clear();
         }
 
         private void buttonGuardar_Click(object sender, EventArgs e)
@@ -232,9 +252,9 @@ namespace CapaVista
             {
                 string rpta = "";
                 // En comboboxes tipo documento siempre va a haber algún dato, nunca va a estar vacío, luego no hace falta comprobar
-// Apellidos y Direccion al importar la BD permitia valores nulos, lo he cambiado, ya no acepta valores NULOS
+                // Apellidos y Direccion al importar la BD permitia valores nulos, lo he cambiado, ya no acepta valores NULOS
                 if (this.textBoxNombre.Text == string.Empty || textBoxApellidos.Text == string.Empty || textBoxNumDoc.Text == string.Empty
-                        || this.textBoxDireccion.Text == string.Empty)
+                        || this.textBoxDireccion.Text == string.Empty || this.textBoxUsuario.Text == string.Empty || textBoxPass.Text == string.Empty)
                 {
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     problema = true;
@@ -249,24 +269,28 @@ namespace CapaVista
                         errorProviderIcono.SetError(textBoxNumDoc, "Ingrese un Valor");
                     if (this.textBoxDireccion.Text == string.Empty)
                         errorProviderIcono.SetError(textBoxDireccion, "Ingrese un Valor");
+                    if (this.textBoxUsuario.Text == string.Empty)
+                        errorProviderIcono.SetError(textBoxUsuario, "Ingrese un Valor");
+                    if (this.textBoxPass.Text == string.Empty)
+                        errorProviderIcono.SetError(textBoxPass, "Ingrese un Valor");
                 }
                 else
                 {
                     if (this.IsNuevo) // Nuevo, insertamos
                     {
-                        rpta = CCliente.Insertar(this.textBoxNombre.Text.Trim().ToUpper(),
+                        rpta = CTrabajador.Insertar(this.textBoxNombre.Text.Trim().ToUpper(),
                                             this.textBoxApellidos.Text.Trim().ToUpper(), this.comboBoxSexo.Text,
-                                            this.dateTimePickerFechaN.Value, this.comboBoxTipoDoc.Text,
-                                            this.textBoxNumDoc.Text.Trim(), this.textBoxDireccion.Text.Trim(),
-                                            this.textBoxTelefono.Text.Trim(), this.textBoxEmail.Text.Trim());
+                                            this.dateTimePickerFechaN.Value, this.textBoxNumDoc.Text.Trim(), this.textBoxDireccion.Text.Trim(),
+                                            this.textBoxTelefono.Text.Trim(), this.textBoxEmail.Text.Trim(),
+                                            this.comboBoxAcceso.Text, this.textBoxUsuario.Text.Trim(), this.textBoxPass.Text.Trim());
                     }
                     else // No es nuevo, se va a EDITAR, if (this.IsEditar)
                     {
-                        rpta = CCliente.Editar(Convert.ToInt32(textBoxIdCliente.Text), this.textBoxNombre.Text.Trim().ToUpper(),
+                        rpta = CTrabajador.Editar(Convert.ToInt32(textBoxIdTrabajador.Text), this.textBoxNombre.Text.Trim().ToUpper(),
                                             this.textBoxApellidos.Text.Trim().ToUpper(), this.comboBoxSexo.Text,
-                                            this.dateTimePickerFechaN.Value, this.comboBoxTipoDoc.Text,
-                                            this.textBoxNumDoc.Text.Trim(), this.textBoxDireccion.Text.Trim(),
-                                            this.textBoxTelefono.Text.Trim(), this.textBoxEmail.Text.Trim());
+                                            this.dateTimePickerFechaN.Value, this.textBoxNumDoc.Text.Trim(), this.textBoxDireccion.Text.Trim(),
+                                            this.textBoxTelefono.Text.Trim(), this.textBoxEmail.Text.Trim(),
+                                            this.comboBoxAcceso.Text, this.textBoxUsuario.Text.Trim(), this.textBoxPass.Text.Trim());
                     }
 
                     if (rpta.Equals("OK")) // Guardado en BD
@@ -304,7 +328,7 @@ namespace CapaVista
 
         private void buttonEditar_Click(object sender, EventArgs e)
         {
-            if (!this.textBoxIdCliente.Text.Equals(""))
+            if (!this.textBoxIdTrabajador.Text.Equals(""))
             {
                 this.IsEditar = true;
                 this.IsNuevo = false; // de mi cosecha
@@ -315,15 +339,6 @@ namespace CapaVista
             {
                 this.MensajeError("Debe de seleccionar primero el registro a modificar");
             }
-        }
-
-        private void buttonCancelar_Click(object sender, EventArgs e)
-        {
-            this.IsNuevo = false;
-            this.IsEditar = false;
-            this.Botones();
-            this.Limpiar();
-            errorProviderIcono.Clear();
         }
     }
 }

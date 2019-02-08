@@ -20,7 +20,7 @@ namespace SisVentas
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 // Form principal para mostrar
-            Application.Run(new FrmCliente());
+            Application.Run(new FrmPrincipalMDI());
         // Probar FrmArticulo es diferente, por desde ahí buscar categorías
  //           Application.Run(FrmArticulo.GetInstancia());
         }

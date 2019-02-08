@@ -67,11 +67,23 @@
     <Compile Include="FrmPresentacion.Designer.cs">
       <DependentUpon>FrmPresentacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmPrincipalMDI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPrincipalMDI.Designer.cs">
+      <DependentUpon>FrmPrincipalMDI.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmProveedor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmProveedor.Designer.cs">
       <DependentUpon>FrmProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTrabajador.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTrabajador.Designer.cs">
+      <DependentUpon>FrmTrabajador.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmVistaCategoria_Articulo.cs">
       <SubType>Form</SubType>
@@ -105,8 +117,14 @@
     <EmbeddedResource Include="FrmPresentacion.resx">
       <DependentUpon>FrmPresentacion.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmPrincipalMDI.resx">
+      <DependentUpon>FrmPrincipalMDI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmProveedor.resx">
       <DependentUpon>FrmProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTrabajador.resx">
+      <DependentUpon>FrmTrabajador.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmVistaCategoria_Articulo.resx">
       <DependentUpon>FrmVistaCategoria_Articulo.cs</DependentUpon>
