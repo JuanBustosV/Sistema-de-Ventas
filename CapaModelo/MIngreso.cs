@@ -76,14 +76,6 @@ namespace CapaModelo
                     CommandText = "spinsertar_ingreso", // Procedimiento almacenado en SQL Server
                     CommandType = CommandType.StoredProcedure
                 };
-                /* ANTES
-                 * 
-                SqlCommand SqlCmd = new SqlCommand();
-                SqlCmd.Connection = SqlCon;
-                SqlCmd.CommandText = "spinsertar_categoria";
-                SqlCmd.CommandType = CommandType.StoredProcedure;
-                 * 
-                */
 
                 SqlParameter ParIdIngreso = new SqlParameter
                 {

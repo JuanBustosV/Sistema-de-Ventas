@@ -94,6 +94,7 @@ namespace CapaVista
             this.textBoxStockIni.Text = string.Empty;
             this.txtPrecioCompra.Text = string.Empty;
             this.txtPrecioVenta.Text = string.Empty;
+            totalPagado = 0;
         }
 
         // Habilitar/Deshabilitar los controles textBoxes del formulario
@@ -177,11 +178,13 @@ namespace CapaVista
                 this.dtDetalle.Clear();
             this.dtDetalle = new DataTable("Detalle");
             this.dtDetalle.Columns.Add("idarticulo", System.Type.GetType("System.Int32"));
+            this.dtDetalle.Columns["idarticulo"].ReadOnly = true;
             this.dtDetalle.Columns.Add("articulo", System.Type.GetType("System.String"));
+            this.dtDetalle.Columns["articulo"].ReadOnly = true;
             this.dtDetalle.Columns.Add("precio_compra", System.Type.GetType("System.Decimal"));
             this.dtDetalle.Columns.Add("precio_venta", System.Type.GetType("System.Decimal"));
             this.dtDetalle.Columns.Add("stock_inicial", System.Type.GetType("System.Int32"));
-            this.dtDetalle.Columns.Add("fecha_produccion", System.Type.GetType("System.DateTime"));
+            this.dtDetalle.Columns.Add("fecha_produccion", System.Type.GetType("System.DateTime"));                    
             this.dtDetalle.Columns.Add("fecha_vencimiento", System.Type.GetType("System.DateTime"));
             this.dtDetalle.Columns.Add("subtotal", System.Type.GetType("System.Decimal"));
             // Relacionar nuestro DataGridView con nuestro DataTable
@@ -294,6 +297,7 @@ namespace CapaVista
             this.Botones(); // dehabilita los textboxes
             this.Limpiar();
             this.LimpiarDetalle();
+            this.errorProviderIcono.Clear();
         }
 
         private void buttonGuardar_Click(object sender, EventArgs e)
@@ -308,7 +312,7 @@ namespace CapaVista
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     errorProviderIcono.Clear();
                     if (textBoxIdProveedor.Text == string.Empty)
-                        errorProviderIcono.SetError(textBoxIdProveedor, "Ingrese un Valor");
+                        errorProviderIcono.SetError(buttonBuscarProveedor, "Ingrese un Valor");
                     if (textBoxSerie.Text == string.Empty)
                         errorProviderIcono.SetError(textBoxSerie, "Ingrese un Valor");                   
                     if (textBoxCorrelativo.Text == string.Empty)
@@ -336,13 +340,14 @@ namespace CapaVista
                     {
                         this.MensajeError(rpta);
                     }
-                }
 
-                this.IsNuevo = false;
-                this.Botones(); // <- hace habilitar(false)
-                this.Limpiar();
-                this.LimpiarDetalle();
-                this.Mostrar();
+                    this.IsNuevo = false;
+                    this.Botones(); // <- hace habilitar(false)
+                    this.Limpiar();
+                    this.LimpiarDetalle();
+                    this.Mostrar();
+                    errorProviderIcono.Clear();
+                }
             }
             catch (Exception ex)
             {
@@ -360,7 +365,7 @@ namespace CapaVista
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     errorProviderIcono.Clear();
                     if (textBoxIdArticulo.Text == string.Empty)
-                        errorProviderIcono.SetError(textBoxIdArticulo, "Ingrese un Valor");
+                        errorProviderIcono.SetError(buttonBuscarArt, "Ingrese un Valor");
                     if (textBoxStockIni.Text == string.Empty)
                         errorProviderIcono.SetError(textBoxStockIni, "Ingrese un Valor");
                     if (txtPrecioCompra.Text == string.Empty)
@@ -398,6 +403,7 @@ namespace CapaVista
                         this.dtDetalle.Rows.Add(row);
                         this.LimpiarDetalle();
                     }
+                    errorProviderIcono.Clear();
                 }
             }
             catch (Exception ex)
@@ -436,6 +442,26 @@ namespace CapaVista
             this.MostrarDetalle();
 
             this.tabControl1.SelectedIndex = 1;
+        }
+        // Actualizar Total si cambia stock en el detalle
+        private void dataListadoDetalle_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataListadoDetalle.RowCount > 0)
+            {
+                if (e.ColumnIndex == dataListadoDetalle.Columns["stock_inicial"].Index) // si cambia valor en celda de la columna STOCK_inicial
+                {
+                    decimal subTotal = Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["stock_inicial"].Value) * Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["precio_compra"].Value);
+                    dataListadoDetalle.Rows[e.RowIndex].Cells["subtotal"].Value = subTotal;
+                    totalPagado = 0;
+                    // Recalculo el total pagado sumando todos los subtotales
+                    foreach (DataGridViewRow row in dataListadoDetalle.Rows)//  Rows[e.RowIndex].Cells["precio_compra"].)
+                    {
+                        totalPagado = totalPagado + Convert.ToDecimal(row.Cells["subTotal"].Value);
+                    }
+
+                    this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
+                }
+            }
         }
     }
 }
