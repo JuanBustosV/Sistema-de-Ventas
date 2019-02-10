@@ -102,5 +102,18 @@ namespace CapaControlador
 
             return Obj.BuscarNum_Documento(Obj);
         }
+
+        // Método Login que llama al método Login de la clase MTrabajador
+        // de la CapaModelo
+        public static DataTable Login(string usuario, string password)
+        {
+            MTrabajador Obj = new MTrabajador
+            {
+                Usuario = usuario,
+                Password = password
+            };
+
+            return Obj.Login(Obj);
+        }
     }
 }

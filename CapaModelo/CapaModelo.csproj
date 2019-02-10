@@ -45,6 +45,8 @@
     <Compile Include="MArticulo.cs" />
     <Compile Include="MCategoria.cs" />
     <Compile Include="MCliente.cs" />
+    <Compile Include="MDetalle_Ingreso.cs" />
+    <Compile Include="MIngreso.cs" />
     <Compile Include="MPresentacion.cs" />
     <Compile Include="MProveedor.cs" />
     <Compile Include="MTrabajador.cs" />

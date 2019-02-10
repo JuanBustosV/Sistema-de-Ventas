@@ -67,24 +67,30 @@ namespace CapaModelo
                  * 
                 */
 
-                SqlParameter ParIdcategoria = new SqlParameter();
-                ParIdcategoria.ParameterName = "@idcategoria"; // <- Nombre variable en el procedimiento almacenado SQL Server
-                ParIdcategoria.SqlDbType = SqlDbType.Int;
-                ParIdcategoria.Direction = ParameterDirection.Output; // valor se autogenera al insertar
+                SqlParameter ParIdcategoria = new SqlParameter
+                {
+                    ParameterName = "@idcategoria", // <- Nombre variable en el procedimiento almacenado SQL Server
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Output // valor se autogenera al insertar
+                };
                 SqlCmd.Parameters.Add(ParIdcategoria);
 
-                SqlParameter ParNombre = new SqlParameter();
-                ParNombre.ParameterName = "@nombre";
-                ParNombre.SqlDbType = SqlDbType.VarChar;
-                ParNombre.Size = 50;
-                ParNombre.Value = Categoria.Nombre;     // Establezco valor del parámetro para la BD
+                SqlParameter ParNombre = new SqlParameter
+                {
+                    ParameterName = "@nombre",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 50,
+                    Value = Categoria.Nombre     // Establezco valor del parámetro para la BD
+                };
                 SqlCmd.Parameters.Add(ParNombre);
 
-                SqlParameter ParDescripcion = new SqlParameter();
-                ParDescripcion.ParameterName = "@descripcion";
-                ParDescripcion.SqlDbType = SqlDbType.VarChar;
-                ParDescripcion.Size = 256;
-                ParDescripcion.Value = Categoria.Descripcion;
+                SqlParameter ParDescripcion = new SqlParameter
+                {
+                    ParameterName = "@descripcion",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 256,
+                    Value = Categoria.Descripcion
+                };
                 SqlCmd.Parameters.Add(ParDescripcion);
 
                 // Ejecutamos nuestro comando

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.errorProviderIcono = new System.Windows.Forms.ErrorProvider(this.components);
             this.labelTotal = new System.Windows.Forms.Label();
             this.checkBoxEliminar = new System.Windows.Forms.CheckBox();
@@ -52,6 +52,12 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxPass = new System.Windows.Forms.TextBox();
+            this.labelPass = new System.Windows.Forms.Label();
+            this.textBoxUsuario = new System.Windows.Forms.TextBox();
+            this.labelUsuario = new System.Windows.Forms.Label();
+            this.comboBoxAcceso = new System.Windows.Forms.ComboBox();
+            this.labelAcceso = new System.Windows.Forms.Label();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
             this.labelEmail = new System.Windows.Forms.Label();
             this.textBoxTelefono = new System.Windows.Forms.TextBox();
@@ -71,12 +77,6 @@
             this.labelCodigo = new System.Windows.Forms.Label();
             this.labelTrabajadores = new System.Windows.Forms.Label();
             this.toolTipMensaje = new System.Windows.Forms.ToolTip(this.components);
-            this.labelAcceso = new System.Windows.Forms.Label();
-            this.comboBoxAcceso = new System.Windows.Forms.ComboBox();
-            this.textBoxUsuario = new System.Windows.Forms.TextBox();
-            this.labelUsuario = new System.Windows.Forms.Label();
-            this.textBoxPass = new System.Windows.Forms.TextBox();
-            this.labelPass = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderIcono)).BeginInit();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListado)).BeginInit();
@@ -229,37 +229,37 @@
             this.dataGridViewListado.AllowUserToAddRows = false;
             this.dataGridViewListado.AllowUserToDeleteRows = false;
             this.dataGridViewListado.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewListado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewListado.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Eliminar});
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewListado.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewListado.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewListado.Location = new System.Drawing.Point(16, 117);
             this.dataGridViewListado.MultiSelect = false;
             this.dataGridViewListado.Name = "dataGridViewListado";
             this.dataGridViewListado.ReadOnly = true;
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewListado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewListado.Size = new System.Drawing.Size(741, 256);
             this.dataGridViewListado.TabIndex = 7;
@@ -283,7 +283,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImage = global::CapaVista.Properties.Resources.Users_2;
+            this.pictureBox1.BackgroundImage = global::CapaVista.Properties.Resources.graduation_hat;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Location = new System.Drawing.Point(210, 10);
             this.pictureBox1.Name = "pictureBox1";
@@ -348,6 +348,69 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Trabajadores";
+            // 
+            // textBoxPass
+            // 
+            this.textBoxPass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.textBoxPass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxPass.Location = new System.Drawing.Point(516, 253);
+            this.textBoxPass.MaxLength = 20;
+            this.textBoxPass.Name = "textBoxPass";
+            this.textBoxPass.PasswordChar = '*';
+            this.textBoxPass.Size = new System.Drawing.Size(112, 20);
+            this.textBoxPass.TabIndex = 31;
+            // 
+            // labelPass
+            // 
+            this.labelPass.AutoSize = true;
+            this.labelPass.Location = new System.Drawing.Point(454, 255);
+            this.labelPass.Name = "labelPass";
+            this.labelPass.Size = new System.Drawing.Size(56, 13);
+            this.labelPass.TabIndex = 30;
+            this.labelPass.Text = "Password:";
+            // 
+            // textBoxUsuario
+            // 
+            this.textBoxUsuario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.textBoxUsuario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxUsuario.Location = new System.Drawing.Point(290, 252);
+            this.textBoxUsuario.MaxLength = 20;
+            this.textBoxUsuario.Name = "textBoxUsuario";
+            this.textBoxUsuario.Size = new System.Drawing.Size(144, 20);
+            this.textBoxUsuario.TabIndex = 29;
+            // 
+            // labelUsuario
+            // 
+            this.labelUsuario.AutoSize = true;
+            this.labelUsuario.Location = new System.Drawing.Point(238, 255);
+            this.labelUsuario.Name = "labelUsuario";
+            this.labelUsuario.Size = new System.Drawing.Size(46, 13);
+            this.labelUsuario.TabIndex = 28;
+            this.labelUsuario.Text = "Usuario:";
+            // 
+            // comboBoxAcceso
+            // 
+            this.comboBoxAcceso.FormattingEnabled = true;
+            this.comboBoxAcceso.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.comboBoxAcceso.Items.AddRange(new object[] {
+            "Administrador",
+            "Vendedor",
+            "Almacenero"});
+            this.comboBoxAcceso.Location = new System.Drawing.Point(98, 251);
+            this.comboBoxAcceso.MaxLength = 20;
+            this.comboBoxAcceso.Name = "comboBoxAcceso";
+            this.comboBoxAcceso.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxAcceso.TabIndex = 27;
+            this.comboBoxAcceso.Text = "Vendedor";
+            // 
+            // labelAcceso
+            // 
+            this.labelAcceso.AutoSize = true;
+            this.labelAcceso.Location = new System.Drawing.Point(27, 254);
+            this.labelAcceso.Name = "labelAcceso";
+            this.labelAcceso.Size = new System.Drawing.Size(46, 13);
+            this.labelAcceso.TabIndex = 26;
+            this.labelAcceso.Text = "Acceso:";
             // 
             // textBoxEmail
             // 
@@ -535,69 +598,6 @@
             // toolTipMensaje
             // 
             this.toolTipMensaje.IsBalloon = true;
-            // 
-            // labelAcceso
-            // 
-            this.labelAcceso.AutoSize = true;
-            this.labelAcceso.Location = new System.Drawing.Point(27, 254);
-            this.labelAcceso.Name = "labelAcceso";
-            this.labelAcceso.Size = new System.Drawing.Size(46, 13);
-            this.labelAcceso.TabIndex = 26;
-            this.labelAcceso.Text = "Acceso:";
-            // 
-            // comboBoxAcceso
-            // 
-            this.comboBoxAcceso.FormattingEnabled = true;
-            this.comboBoxAcceso.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.comboBoxAcceso.Items.AddRange(new object[] {
-            "Administrador",
-            "Vendedor",
-            "Almacenero"});
-            this.comboBoxAcceso.Location = new System.Drawing.Point(98, 251);
-            this.comboBoxAcceso.MaxLength = 20;
-            this.comboBoxAcceso.Name = "comboBoxAcceso";
-            this.comboBoxAcceso.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxAcceso.TabIndex = 27;
-            this.comboBoxAcceso.Text = "Vendedor";
-            // 
-            // textBoxUsuario
-            // 
-            this.textBoxUsuario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.textBoxUsuario.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxUsuario.Location = new System.Drawing.Point(290, 252);
-            this.textBoxUsuario.MaxLength = 20;
-            this.textBoxUsuario.Name = "textBoxUsuario";
-            this.textBoxUsuario.Size = new System.Drawing.Size(144, 20);
-            this.textBoxUsuario.TabIndex = 29;
-            // 
-            // labelUsuario
-            // 
-            this.labelUsuario.AutoSize = true;
-            this.labelUsuario.Location = new System.Drawing.Point(238, 255);
-            this.labelUsuario.Name = "labelUsuario";
-            this.labelUsuario.Size = new System.Drawing.Size(46, 13);
-            this.labelUsuario.TabIndex = 28;
-            this.labelUsuario.Text = "Usuario:";
-            // 
-            // textBoxPass
-            // 
-            this.textBoxPass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.textBoxPass.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxPass.Location = new System.Drawing.Point(516, 253);
-            this.textBoxPass.MaxLength = 20;
-            this.textBoxPass.Name = "textBoxPass";
-            this.textBoxPass.PasswordChar = '*';
-            this.textBoxPass.Size = new System.Drawing.Size(112, 20);
-            this.textBoxPass.TabIndex = 31;
-            // 
-            // labelPass
-            // 
-            this.labelPass.AutoSize = true;
-            this.labelPass.Location = new System.Drawing.Point(454, 255);
-            this.labelPass.Name = "labelPass";
-            this.labelPass.Size = new System.Drawing.Size(56, 13);
-            this.labelPass.TabIndex = 30;
-            this.labelPass.Text = "Password:";
             // 
             // FrmTrabajador
             // 

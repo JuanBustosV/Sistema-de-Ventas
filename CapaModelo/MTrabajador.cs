@@ -490,5 +490,50 @@ namespace CapaModelo
             }
             return DtResultado;
         }
+
+        // Método LOGIN
+        public DataTable Login(MTrabajador Trabajador)
+        {
+            DataTable DtResultado = new DataTable("trabajador");
+            SqlConnection SqlCon = new SqlConnection();
+            try
+            {
+                SqlCon.ConnectionString = ConexionDB.Cn;
+                SqlCommand SqlCmd = new SqlCommand
+                {
+                    Connection = SqlCon,
+                    CommandText = "splogin",
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                // el procedimiento tiene dos parámetro
+                SqlParameter ParUsuario = new SqlParameter
+                {
+                    ParameterName = "@usuario",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 20,
+                    Value = Trabajador.Usuario
+                };
+                SqlCmd.Parameters.Add(ParUsuario);
+
+                SqlParameter ParPassword = new SqlParameter
+                {
+                    ParameterName = "@password",
+                    SqlDbType = SqlDbType.VarChar,
+                    Size = 20,
+                    Value = Trabajador.Password
+                };
+                SqlCmd.Parameters.Add(ParPassword);
+
+                SqlDataAdapter SqlDat = new SqlDataAdapter(SqlCmd);
+                SqlDat.Fill(DtResultado);
+            }
+            catch (Exception ex)
+            {
+                DtResultado = null;
+            }
+            return DtResultado;
+        }
+
     }
 }

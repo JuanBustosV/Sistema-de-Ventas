@@ -14,6 +14,16 @@ namespace CapaVista
     {
         private int childFormNumber = 0;
 
+        private string _Idtrabajador = "";
+        private string _Apellidos = "";
+        private string _Nombre = "";
+        private string _Acceso = "";
+
+        public string Idtrabajador { get => _Idtrabajador; set => _Idtrabajador = value; }
+        public string Apellidos { get => _Apellidos; set => _Apellidos = value; }
+        public string Nombre { get => _Nombre; set => _Nombre = value; }
+        public string Acceso { get => _Acceso; set => _Acceso = value; }
+
         public FrmPrincipalMDI()
         {
             InitializeComponent();
@@ -156,6 +166,69 @@ namespace CapaVista
 
             frm.MdiParent = this;
             frm.Show();
+        }
+
+        // Acceso a menús
+        private void GestionUsuario()
+        {
+            // Controlar los usuarios
+            if (Acceso == "Administrador")
+            {
+                this.MnuAlmacen.Enabled = true;
+                this.MnuCompras.Enabled = true;
+                this.MnuVentas.Enabled = true;
+                this.MnuMantenimiento.Enabled = true;
+                this.MnuConsultas.Enabled = true;
+                this.MnuHerramientas.Enabled = true;
+                this.toolStripCompras.Enabled = true;
+                this.toolStripVentas.Enabled = true;
+            }
+            else if (Acceso == "Vendedor")
+            {
+                this.MnuAlmacen.Enabled = false;
+                this.MnuCompras.Enabled = false;
+                this.MnuVentas.Enabled = true;
+                this.MnuMantenimiento.Enabled = false;
+                this.MnuConsultas.Enabled = true;
+                this.MnuHerramientas.Enabled = true;
+                this.toolStripCompras.Enabled = false;
+                this.toolStripVentas.Enabled = true;
+            }
+            else if (Acceso == "Almacenero")
+            {
+                this.MnuAlmacen.Enabled = true;
+                this.MnuCompras.Enabled = true;
+                this.MnuVentas.Enabled = false;
+                this.MnuMantenimiento.Enabled = false;
+                this.MnuConsultas.Enabled = true;
+                this.MnuHerramientas.Enabled = true;
+                this.toolStripCompras.Enabled = true;
+                this.toolStripVentas.Enabled = false;
+            }
+            else
+            {
+                this.MnuAlmacen.Enabled = false;
+                this.MnuCompras.Enabled = false;
+                this.MnuVentas.Enabled = false;
+                this.MnuMantenimiento.Enabled = false;
+                this.MnuConsultas.Enabled = false;
+                this.MnuHerramientas.Enabled = false;
+                this.toolStripCompras.Enabled = false;
+                this.toolStripVentas.Enabled = false;
+            }
+        }
+
+        private void FrmPrincipalMDI_Load(object sender, EventArgs e)
+        {
+            GestionUsuario();
+        }
+
+        private void ingresosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmIngreso frm = FrmIngreso.GetInstancia();
+            frm.MdiParent = this;
+            frm.Show();
+            frm.Idtrabajador = Convert.ToInt32(this.Idtrabajador); // El trabajador logeado al sistema, para permisos
         }
     }
 }

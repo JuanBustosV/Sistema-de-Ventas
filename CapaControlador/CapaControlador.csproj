@@ -44,6 +44,7 @@
     <Compile Include="CArticulo.cs" />
     <Compile Include="CCategoria.cs" />
     <Compile Include="CCliente.cs" />
+    <Compile Include="CIngreso.cs" />
     <Compile Include="CPresentacion.cs" />
     <Compile Include="CProveedor.cs" />
     <Compile Include="CTrabajador.cs" />
