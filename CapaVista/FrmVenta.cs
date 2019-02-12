@@ -515,5 +515,12 @@ namespace CapaVista
         {
             e.Handled = !Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar) && !e.KeyChar.ToString().Equals(",");
         }
+
+        private void btnComprobante_Click(object sender, EventArgs e)
+        {
+            FrmReporteFactura frm = new FrmReporteFactura();
+            frm.Idventa = Convert.ToInt32(this.dataGridViewListado.CurrentRow.Cells["idventa"].Value);
+            frm.ShowDialog();
+        }
     }
 }
