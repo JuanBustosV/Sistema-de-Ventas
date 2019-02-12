@@ -48,6 +48,7 @@
     <Compile Include="CPresentacion.cs" />
     <Compile Include="CProveedor.cs" />
     <Compile Include="CTrabajador.cs" />
+    <Compile Include="CVenta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

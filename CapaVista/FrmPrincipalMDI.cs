@@ -230,5 +230,13 @@ namespace CapaVista
             frm.Show();
             frm.Idtrabajador = Convert.ToInt32(this.Idtrabajador); // El trabajador logeado al sistema, para permisos
         }
+
+        private void ventasToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FrmVenta frm = FrmVenta.GetInstancia();
+            frm.MdiParent = this;
+            frm.Show();
+            frm.Idtrabajador = Convert.ToInt32(this.Idtrabajador);
+        }
     }
 }

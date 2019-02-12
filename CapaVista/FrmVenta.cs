@@ -8,56 +8,63 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+// conectar capa
 using CapaControlador;
 
 namespace CapaVista
 {
-    public partial class FrmIngreso : Form
+    public partial class FrmVenta : Form
     {
-        public int Idtrabajador; // EL trabajador que se loggea, para los permisos
-
-        private bool IsNuevo;
+        private bool IsNuevo = false;
+        public int Idtrabajador; // el logeado
         private DataTable dtDetalle;
+
         private decimal totalPagado = 0;
 
-        // Porque abre otras ventanas de búsqueda (otros forms)
-        private static FrmIngreso _Instancia;
+        private static FrmVenta _Instancia;
 
-        public static FrmIngreso GetInstancia()
+        public static FrmVenta GetInstancia()
         {
             if (_Instancia == null)
             {
-                _Instancia = new FrmIngreso(); // al cerrar form, _Instancia = null formclosing
+                _Instancia = new FrmVenta();
             }
             return _Instancia;
         }
 
-        public void setProveedor(string idproveedor, string nombre)
+        public void setCliente(string idcliente, string nombre)
         {
-            this.textBoxIdProveedor.Text = idproveedor;
-            this.textBoxProveedor.Text = nombre;
+            this.txtIdCliente.Text = idcliente;
+            this.txtCliente.Text = nombre;
         }
 
-        public void setArticulo(string idarticulo, string nombre)
+        public void setArticulo(string iddetalle_ingreso, string nombre, decimal precio_compra,
+                        decimal precio_venta, int stock, DateTime fecha_vencimiento)
         {
-            this.textBoxIdArticulo.Text = idarticulo;
+            this.txtIdDetalle_ingreso.Text = iddetalle_ingreso; // cogo el iddetalle de ingreso, no el idarticulo
             this.textBoxArticulo.Text = nombre;
+            this.txtPrecioCompra.Text = Convert.ToString(precio_compra);
+            this.txtPrecioVenta.Text = Convert.ToString(precio_venta);
+            this.txtStockActual.Text = Convert.ToString(stock);
+            this.dtFecha_Vencimiento.Value = fecha_vencimiento;
         }
 
-        public FrmIngreso()
+        public FrmVenta()
         {
             InitializeComponent();
-            this.toolTipMensaje.SetToolTip(this.textBoxProveedor, "Seleccione el Proveedor");
-            this.toolTipMensaje.SetToolTip(this.textBoxSerie, "Ingrese la Serie del Comprobante");
-            this.toolTipMensaje.SetToolTip(this.textBoxCorrelativo, "Ingrese el número del Comprobante");
-            this.toolTipMensaje.SetToolTip(this.textBoxStockIni, "Ingrese la cantidad de compra");
-            this.toolTipMensaje.SetToolTip(this.textBoxArticulo, "Seleccione el Articulo");
+            toolTipMensaje.SetToolTip(txtCliente, "Seleccione un Cliente");
+            toolTipMensaje.SetToolTip(textBoxSerie, "Ingrese una serie del comprobante");
+            toolTipMensaje.SetToolTip(textBoxCorrelativo, "Ingrese un número de comprobante");
+            toolTipMensaje.SetToolTip(txtCantidad, "Ingrese la Cantidad del Artículo");
+            toolTipMensaje.SetToolTip(textBoxArticulo, "Seleccione un Artículo");
 
-            this.textBoxIdProveedor.Visible = false;
-            this.textBoxIdArticulo.Visible = false;
-            this.textBoxProveedor.ReadOnly = true;
-            this.textBoxArticulo.ReadOnly = true;
-
+            txtIdCliente.Visible = false;
+            txtIdDetalle_ingreso.Visible = false;
+            textBoxArticulo.ReadOnly = true;
+            txtCliente.ReadOnly = true;
+            txtStockActual.ReadOnly = true;
+            txtPrecioCompra.ReadOnly = true;
+            dtFecha_Vencimiento.Enabled = false;
         }
 
         // Mostrar Mensaje de Confirmación
@@ -76,9 +83,9 @@ namespace CapaVista
 
         private void Limpiar()
         {
-            this.textBoxIdIngreso.Text = string.Empty;
-            this.textBoxIdProveedor.Text = string.Empty;
-            this.textBoxProveedor.Text = string.Empty;
+            this.textBoxIdVenta.Text = string.Empty;
+            this.txtIdCliente.Text = string.Empty;
+            this.txtCliente.Text = string.Empty;
             this.textBoxSerie.Text = string.Empty;
             this.textBoxCorrelativo.Text = string.Empty;
             this.textBoxIva.Text = "21";
@@ -86,33 +93,33 @@ namespace CapaVista
             this.CrearTabla();
         }
 
-        // Limpiar los controles del detalle de ingreso
+        // Limpiar los controles del detalle de ingreso, al agregar hay que limpiar los campos detalle
         private void LimpiarDetalle()
         {
-            this.textBoxIdArticulo.Text = string.Empty;
+            this.txtIdDetalle_ingreso.Text = string.Empty;
             this.textBoxArticulo.Text = string.Empty;
-            this.textBoxStockIni.Text = string.Empty;
+            this.txtStockActual.Text = string.Empty;
+            txtCantidad.Text = string.Empty;
             this.txtPrecioCompra.Text = string.Empty;
-            this.txtPrecioVenta.Text = string.Empty;            
+            this.txtPrecioVenta.Text = string.Empty;
+            txtDescuento.Text = string.Empty;            
         }
 
         // Habilitar/Deshabilitar los controles textBoxes del formulario
 
         private void Habilitar(bool valor)
         {
-            this.textBoxIdIngreso.ReadOnly = !valor;
+            this.textBoxIdVenta.ReadOnly = !valor;
             this.textBoxSerie.ReadOnly = !valor;
             this.textBoxCorrelativo.ReadOnly = !valor;
             this.textBoxIva.ReadOnly = !valor;
-            this.textBoxStockIni.ReadOnly = !valor;
-            this.txtPrecioCompra.ReadOnly = !valor;
+            txtCantidad.ReadOnly = !valor;            
             this.txtPrecioVenta.ReadOnly = !valor;
+            txtDescuento.ReadOnly = !valor;
 
-            this.dateTimePickerFecha.Enabled = valor;
-            this.dtFecha_Produccion.Enabled = valor;
-            this.dtFecha_Vencimiento.Enabled = valor;
+            this.dateTimePickerFecha.Enabled = valor;            
             this.buttonBuscarArt.Enabled = valor;
-            this.buttonBuscarProveedor.Enabled = valor;
+            this.btnBuscarCliente.Enabled = valor;
             this.btnAgregar.Enabled = valor;
             this.btnQuitar.Enabled = valor;
 
@@ -138,19 +145,18 @@ namespace CapaVista
             }
         }
 
-        // Método para ocultar columnas, hacer el select del procedimiento spmostrar_articulo SQL Server
-        // Para ver las Columnas, que serían al final: 0 Eliminar, 1 idingreso
+        // Método para ocultar columnas, hacer el select del procedimiento spmostrar_venta SQL Server
+        // Para ver las Columnas, que serían al final: 0 Eliminar, 1 id¿?
         private void OcultarColumnas()
         {
             this.dataGridViewListado.Columns[0].Visible = false; // Columna Eliminar
-            this.dataGridViewListado.Columns[1].Visible = false; // Columna idingreso
-
+            this.dataGridViewListado.Columns[1].Visible = false; // Columna id
         }
 
         // Método Mostrar 
         private void Mostrar()
         {
-            this.dataGridViewListado.DataSource = CIngreso.Mostrar();
+            this.dataGridViewListado.DataSource = CVenta.Mostrar();
             this.OcultarColumnas();
             labelTotal.Text = "Total de Registros: " + dataGridViewListado.Rows.Count;
         }
@@ -158,7 +164,7 @@ namespace CapaVista
         // Método BuscarFechas
         private void BuscarFechas()
         {
-            this.dataGridViewListado.DataSource = CIngreso.BuscarFechas(this.dateTimePicker1.Value.ToString("dd/MM/yyyy"),
+            this.dataGridViewListado.DataSource = CVenta.BuscarFechas(this.dateTimePicker1.Value.ToString("dd/MM/yyyy"),
                                                         this.dateTimePicker2.Value.ToString("dd/MM/yyyy"));
             this.OcultarColumnas();
             this.labelTotal.Text = "Total de Registros: " + dataGridViewListado.Rows.Count;
@@ -167,7 +173,7 @@ namespace CapaVista
         // Método MostrarDetalle
         private void MostrarDetalle()
         {
-            this.dataListadoDetalle.DataSource = CIngreso.MostrarDetalle(this.textBoxIdIngreso.Text);            
+            this.dataListadoDetalle.DataSource = CVenta.MostrarDetalle(this.textBoxIdVenta.Text);
         }
 
         // Método CrearTabla
@@ -176,48 +182,55 @@ namespace CapaVista
             if (dtDetalle != null)
                 this.dtDetalle.Dispose();
             this.dtDetalle = new DataTable("Detalle");
-            this.dtDetalle.Columns.Add("idarticulo", System.Type.GetType("System.Int32"));           
+            this.dtDetalle.Columns.Add("iddetalle_ingreso", System.Type.GetType("System.Int32"));            
             this.dtDetalle.Columns.Add("articulo", System.Type.GetType("System.String"));            
-            this.dtDetalle.Columns.Add("precio_compra", System.Type.GetType("System.Decimal"));
+            this.dtDetalle.Columns.Add("cantidad", System.Type.GetType("System.Int32"));
             this.dtDetalle.Columns.Add("precio_venta", System.Type.GetType("System.Decimal"));
-            this.dtDetalle.Columns.Add("stock_inicial", System.Type.GetType("System.Int32"));
-            this.dtDetalle.Columns.Add("fecha_produccion", System.Type.GetType("System.DateTime"));                    
-            this.dtDetalle.Columns.Add("fecha_vencimiento", System.Type.GetType("System.DateTime"));
+            this.dtDetalle.Columns.Add("descuento", System.Type.GetType("System.Decimal"));            
             this.dtDetalle.Columns.Add("subtotal", System.Type.GetType("System.Decimal"));
             
             // Relacionar nuestro DataGridView con nuestro DataTable
             this.dataListadoDetalle.DataSource = dtDetalle;
         }
 
-        private void FrmIngreso_FormClosing(object sender, FormClosingEventArgs e)
+        private void FrmVenta_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _Instancia.Dispose();
+            _Instancia.Dispose(); // en el tutorial SOLO hace _Instancia = null;
             _Instancia = null;
         }
 
-        private void buttonBuscarProveedor_Click(object sender, EventArgs e)
+        private void btnBuscarCliente_Click(object sender, EventArgs e)
         {
-            FrmVistaProveedor_Ingreso vista = new FrmVistaProveedor_Ingreso();
+            FrmVistaCliente_Venta vista = new FrmVistaCliente_Venta();
             vista.ShowDialog();
         }
 
         private void buttonBuscarArt_Click(object sender, EventArgs e)
         {
-            FrmVistaArticulo_Ingreso vista = new FrmVistaArticulo_Ingreso();
+            FrmVistaArticulo_Venta vista = new FrmVistaArticulo_Venta();
             vista.ShowDialog();
+        }
+
+        private void FrmVenta_Load(object sender, EventArgs e)
+        {
+            Top = 0;
+            Left = 0;
+            Mostrar();
+            Botones();
+            CrearTabla();
         }
 
         private void buttonBuscar_Click(object sender, EventArgs e)
         {
-            this.BuscarFechas();
+            BuscarFechas();
         }
 
-        private void buttonAnular_Click(object sender, EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
             try
             {
                 DialogResult Opcion;
-                Opcion = MessageBox.Show("Realmente Desea Anular los Registros", "Sistemas de Vengas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                Opcion = MessageBox.Show("Realmente Desea Eliminar los Registros", "Sistemas de Vengas", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                 if (Opcion == DialogResult.OK)  // Usuario quiere eliminar el registro
                 {
@@ -229,11 +242,14 @@ namespace CapaVista
                         if (Convert.ToBoolean(row.Cells[0].Value))
                         {
                             Codigo = Convert.ToString(row.Cells[1].Value);
-                            Rpta = CIngreso.Anular(Convert.ToInt32(Codigo));
+                            Rpta = CVenta.Eliminar(Convert.ToInt32(Codigo));
+        /* SQL SERVER */
+                            // Los detalles de venta se eliminan en Cascada de esa venta
+                            // Cada detalle ejecuta su trigger y se actualiza el stock
 
                             if (Rpta.Equals("OK"))
                             {
-                                this.MensajeOk("Se Anuló Correctamente el Ingreso");
+                                this.MensajeOk("Se Eliminó Correctamente la Venta");
                             }
                             else
                             {
@@ -250,9 +266,23 @@ namespace CapaVista
             }
         }
 
-        private void checkBoxAnular_CheckedChanged(object sender, EventArgs e)
+        private void dataGridViewListado_DoubleClick(object sender, EventArgs e)
         {
-            if (checkBoxAnular.Checked)
+            this.textBoxIdVenta.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["idventa"].Value);
+            this.txtCliente.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["cliente"].Value);
+            this.dateTimePickerFecha.Value = Convert.ToDateTime(this.dataGridViewListado.CurrentRow.Cells["fecha"].Value);
+            this.cbTipo_Comprobante.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["tipo_comprobante"].Value);
+            this.textBoxSerie.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["serie"].Value);
+            this.textBoxCorrelativo.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["correlativo"].Value);
+            this.lblTotal_Pagado.Text = Convert.ToDecimal(this.dataGridViewListado.CurrentRow.Cells["total"].Value).ToString("#0.00#");
+            this.MostrarDetalle();
+
+            this.tabControl1.SelectedIndex = 1;
+        }
+
+        private void checkBoxEliminar_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEliminar.Checked)
             {
                 this.dataGridViewListado.Columns[0].Visible = true;
             }
@@ -271,49 +301,39 @@ namespace CapaVista
             }
         }
 
-        private void FrmIngreso_Load(object sender, EventArgs e)
-        {
-            this.Top = 0;
-            this.Left = 0;
-            this.Mostrar();
-            this.Botones();
-            this.CrearTabla();
-        }
-
         private void buttonNuevo_Click(object sender, EventArgs e)
         {
             this.IsNuevo = true;
-            this.Botones();
-            this.Limpiar();
-//            this.Habilitar(true);
-            this.textBoxSerie.Focus();
-            this.LimpiarDetalle();
+            Botones();
+            Limpiar();
+            LimpiarDetalle();
+            textBoxSerie.Focus();
         }
 
         private void buttonCancelar_Click(object sender, EventArgs e)
         {
             this.IsNuevo = false;
-            this.Botones(); // dehabilita los textboxes
-            this.Limpiar();
-            this.LimpiarDetalle();
-            this.errorProviderIcono.Clear();
+            Botones();
+            Limpiar();
+            LimpiarDetalle();
+            textBoxSerie.Focus();
         }
 
         private void buttonGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-                string rpta = ""; 
+                string rpta = "";
 
-                if (this.textBoxIdProveedor.Text == string.Empty || this.textBoxSerie.Text == string.Empty ||
+                if (this.txtCliente.Text == string.Empty || this.textBoxSerie.Text == string.Empty ||
                          textBoxCorrelativo.Text == string.Empty || this.textBoxIva.Text == string.Empty)
                 {
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     errorProviderIcono.Clear();
-                    if (textBoxIdProveedor.Text == string.Empty)
-                        errorProviderIcono.SetError(buttonBuscarProveedor, "Ingrese un Valor");
+                    if (txtCliente.Text == string.Empty)
+                        errorProviderIcono.SetError(btnBuscarCliente, "Ingrese un Valor");
                     if (textBoxSerie.Text == string.Empty)
-                        errorProviderIcono.SetError(textBoxSerie, "Ingrese un Valor");                   
+                        errorProviderIcono.SetError(textBoxSerie, "Ingrese un Valor");
                     if (textBoxCorrelativo.Text == string.Empty)
                         errorProviderIcono.SetError(textBoxCorrelativo, "Ingrese un Valor");
                     if (textBoxIva.Text == string.Empty)
@@ -323,9 +343,9 @@ namespace CapaVista
                 {
                     if (this.IsNuevo) // Nuevo, insertamos
                     {
-                        rpta = CIngreso.Insertar(Idtrabajador, Convert.ToInt32(this.textBoxIdProveedor.Text),
+                        rpta = CVenta.Insertar(Convert.ToInt32(this.txtIdCliente.Text), Idtrabajador,
                                 dateTimePickerFecha.Value, cbTipo_Comprobante.Text, textBoxSerie.Text, textBoxCorrelativo.Text,
-                            Convert.ToDecimal(textBoxIva.Text),"EMITIDO",this.dtDetalle); 
+                            Convert.ToDecimal(textBoxIva.Text), this.dtDetalle);
                     }
 
                     if (rpta.Equals("OK")) // Guardado en BD
@@ -359,56 +379,59 @@ namespace CapaVista
         {
             try
             {
-                if (this.textBoxIdArticulo.Text == string.Empty || this.textBoxStockIni.Text == string.Empty ||
-                         txtPrecioCompra.Text == string.Empty || this.txtPrecioVenta.Text == string.Empty)
+                if (this.textBoxArticulo.Text == string.Empty || this.txtCantidad.Text == string.Empty ||
+                         txtDescuento.Text == string.Empty || this.txtPrecioVenta.Text == string.Empty)
                 {
                     MensajeError("Falta ingresar algunos datos, serán remarcados");
                     errorProviderIcono.Clear();
-                    if (textBoxIdArticulo.Text == string.Empty)
+                    if (textBoxArticulo.Text == string.Empty)
                         errorProviderIcono.SetError(buttonBuscarArt, "Ingrese un Valor");
-                    if (textBoxStockIni.Text == string.Empty)
-                        errorProviderIcono.SetError(textBoxStockIni, "Ingrese un Valor");
-                    if (txtPrecioCompra.Text == string.Empty)
-                        errorProviderIcono.SetError(txtPrecioCompra, "Ingrese un Valor");
+                    if (txtCantidad.Text == string.Empty)
+                        errorProviderIcono.SetError(txtCantidad, "Ingrese un Valor");
+                    if (txtDescuento.Text == string.Empty)
+                        errorProviderIcono.SetError(txtDescuento, "Ingrese un Valor");
                     if (txtPrecioVenta.Text == string.Empty)
                         errorProviderIcono.SetError(txtPrecioVenta, "Ingrese un Valor");
                 }
                 else
                 {
                     bool registrar = true;
-                // 1 comprobar el el artículo no esté ya en el listado de detalles    
+                    // 1 comprobar el el artículo no esté ya en el listado de detalles    
                     foreach (DataRow row in dtDetalle.Rows)
                     {
-                        if (Convert.ToInt32(row["idarticulo"]) == Convert.ToInt32(textBoxIdArticulo.Text))
+                        if (Convert.ToInt32(row["iddetalle_ingreso"]) == Convert.ToInt32(txtIdDetalle_ingreso.Text))
                         {
                             registrar = false;
                             this.MensajeError("YA se encuentra el artículo en el detalle");
                         }
-                    }
-                    if (registrar) // 2 insertar al datagrid si no estaba ya
+                    } // Cantidad a vender <= stock
+                    if (registrar && Convert.ToInt32(txtCantidad.Text)<=Convert.ToInt32(txtStockActual.Text)) // 2 insertar al datagrid si no estaba ya antes
                     {
-                        decimal subTotal = Convert.ToDecimal(this.textBoxStockIni.Text) * Convert.ToDecimal(this.txtPrecioCompra.Text);
+                        decimal subTotal = Convert.ToDecimal(this.txtCantidad.Text) * Convert.ToDecimal(this.txtPrecioVenta.Text)-
+                                                Convert.ToDecimal(this.txtDescuento.Text);
                         totalPagado = totalPagado + subTotal;
                         this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
                         // Agregar ese detalle al datalistadoDetalle
                         DataRow row = this.dtDetalle.NewRow();
-                        row["idarticulo"] = Convert.ToInt32(textBoxIdArticulo.Text);
+                        row["iddetalle_ingreso"] = Convert.ToInt32(txtIdDetalle_ingreso.Text);
                         row["articulo"] = this.textBoxArticulo.Text;
-                        row["precio_compra"] = Convert.ToDecimal(txtPrecioCompra.Text);
+                        row["cantidad"] = Convert.ToInt32(txtCantidad.Text);
                         row["precio_venta"] = Convert.ToDecimal(txtPrecioVenta.Text);
-                        row["stock_inicial"] = Convert.ToInt32(textBoxStockIni.Text);
-                        row["fecha_produccion"] = dtFecha_Produccion.Value;
-                        row["fecha_vencimiento"] = dtFecha_Vencimiento.Value;
+                        row["descuento"] = Convert.ToDecimal(txtDescuento.Text);
                         row["subtotal"] = subTotal;
                         this.dtDetalle.Rows.Add(row);
                         this.LimpiarDetalle();
 
-                        if (dataListadoDetalle.RowCount == 1) // Cuando ya tiene una fila hago las columnas solo lectura
+                        if (dataListadoDetalle.RowCount == 1) // con una fila hago las columnas de solo lectura
                         {
-                            dataListadoDetalle.Columns["idarticulo"].ReadOnly = true;
+                            dataListadoDetalle.Columns["iddetalle_ingreso"].ReadOnly = true;
                             dataListadoDetalle.Columns["articulo"].ReadOnly = true;
                             dataListadoDetalle.Columns["subtotal"].ReadOnly = true;
                         }
+                    }
+                    else
+                    {
+                        MensajeError("No hay Stock Suficiente");
                     }
                     errorProviderIcono.Clear();
                 }
@@ -437,31 +460,17 @@ namespace CapaVista
             }
         }
 
-        private void dataGridViewListado_DoubleClick(object sender, EventArgs e)
-        {
-            this.textBoxIdIngreso.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["idingreso"].Value);
-            this.textBoxProveedor.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["proveedor"].Value);
-            this.dateTimePickerFecha.Value = Convert.ToDateTime(this.dataGridViewListado.CurrentRow.Cells["fecha"].Value);
-            this.cbTipo_Comprobante.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["tipo_comprobante"].Value);
-            this.textBoxSerie.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["serie"].Value);
-            this.textBoxCorrelativo.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["correlativo"].Value);
-            this.lblTotal_Pagado.Text = Convert.ToDecimal(this.dataGridViewListado.CurrentRow.Cells["total"].Value).ToString("#0.00#");
-            this.MostrarDetalle();
-
-            this.tabControl1.SelectedIndex = 1;
-        }
-        // Actualizar Total si cambia stock en el detalle
         private void dataListadoDetalle_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (dataListadoDetalle.RowCount > 0)
             {
-                if (e.ColumnIndex == dataListadoDetalle.Columns["stock_inicial"].Index) // si cambia valor en celda de la columna STOCK_inicial
+                if (e.ColumnIndex == dataListadoDetalle.Columns["cantidad"].Index) // si cambia valor en celda de la columna STOCK_inicial
                 {
-                    decimal subTotal = Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["stock_inicial"].Value) * Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["precio_compra"].Value);
+                    decimal subTotal = Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["cantidad"].Value) * Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["precio_venta"].Value)-
+                                    Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["descuento"].Value);
                     dataListadoDetalle.Columns["subtotal"].ReadOnly = false;
                     dataListadoDetalle.Rows[e.RowIndex].Cells["subtotal"].Value = subTotal;
                     dataListadoDetalle.Columns["subtotal"].ReadOnly = true;
-
                     // Recalculo el total pagado sumando todos los subtotales
                     totalPagado = 0;
                     foreach (DataGridViewRow row in dataListadoDetalle.Rows)
