@@ -82,7 +82,7 @@ namespace CapaVista
             this.textBoxSerie.Text = string.Empty;
             this.textBoxCorrelativo.Text = string.Empty;
             this.textBoxIva.Text = "21";
-            this.lblTotal_Pagado.Text = "0.0";
+            this.lblTotal_Pagado.Text = "0,0";
             this.CrearTabla();
         }
 
@@ -389,7 +389,7 @@ namespace CapaVista
                     {
                         decimal subTotal = Convert.ToDecimal(this.textBoxStockIni.Text) * Convert.ToDecimal(this.txtPrecioCompra.Text);
                         totalPagado = totalPagado + subTotal;
-                        this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
+                        this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//totalPagado.ToString("#0.00#");
                         // Agregar ese detalle al datalistadoDetalle
                         DataRow row = this.dtDetalle.NewRow();
                         row["idarticulo"] = Convert.ToInt32(textBoxIdArticulo.Text);
@@ -427,7 +427,7 @@ namespace CapaVista
                 DataRow row = this.dtDetalle.Rows[indiceFila];
                 // Disminuir el total Pagado
                 this.totalPagado = totalPagado - Convert.ToDecimal(row["subtotal"].ToString());
-                this.lblTotal_Pagado.Text = this.totalPagado.ToString("#0.00#");
+                this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//this.totalPagado.ToString("#0.00#");
                 // Removemos la fila
                 this.dtDetalle.Rows.Remove(row);
             }
@@ -469,7 +469,7 @@ namespace CapaVista
                         totalPagado = totalPagado + Convert.ToDecimal(row.Cells["subtotal"].Value);
                     }
 
-                    this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
+                    this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//totalPagado.ToString("#0.00#");
                 }
             }
         }

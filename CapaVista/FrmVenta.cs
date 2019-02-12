@@ -43,8 +43,8 @@ namespace CapaVista
         {
             this.txtIdDetalle_ingreso.Text = iddetalle_ingreso; // cogo el iddetalle de ingreso, no el idarticulo
             this.textBoxArticulo.Text = nombre;
-            this.txtPrecioCompra.Text = Convert.ToString(precio_compra);
-            this.txtPrecioVenta.Text = Convert.ToString(precio_venta);
+            this.txtPrecioCompra.Text = /*Convert.ToString(precio_compra);*/ precio_compra.ToString("#0.00#");
+            this.txtPrecioVenta.Text = /*Convert.ToString(precio_venta);*/ precio_venta.ToString("#0.00#");
             this.txtStockActual.Text = Convert.ToString(stock);
             this.dtFecha_Vencimiento.Value = fecha_vencimiento;
         }
@@ -89,7 +89,7 @@ namespace CapaVista
             this.textBoxSerie.Text = string.Empty;
             this.textBoxCorrelativo.Text = string.Empty;
             this.textBoxIva.Text = "21";
-            this.lblTotal_Pagado.Text = "0.0";
+            this.lblTotal_Pagado.Text = "0,0";
             this.CrearTabla();
         }
 
@@ -185,6 +185,7 @@ namespace CapaVista
             this.dtDetalle.Columns.Add("iddetalle_ingreso", System.Type.GetType("System.Int32"));            
             this.dtDetalle.Columns.Add("articulo", System.Type.GetType("System.String"));            
             this.dtDetalle.Columns.Add("cantidad", System.Type.GetType("System.Int32"));
+            dtDetalle.Columns.Add("stock", System.Type.GetType("System.Int32")); // por si se actualiza la cantidad, comparar, NO GUARDAR en detalle
             this.dtDetalle.Columns.Add("precio_venta", System.Type.GetType("System.Decimal"));
             this.dtDetalle.Columns.Add("descuento", System.Type.GetType("System.Decimal"));            
             this.dtDetalle.Columns.Add("subtotal", System.Type.GetType("System.Decimal"));
@@ -274,7 +275,7 @@ namespace CapaVista
             this.cbTipo_Comprobante.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["tipo_comprobante"].Value);
             this.textBoxSerie.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["serie"].Value);
             this.textBoxCorrelativo.Text = Convert.ToString(this.dataGridViewListado.CurrentRow.Cells["correlativo"].Value);
-            this.lblTotal_Pagado.Text = Convert.ToDecimal(this.dataGridViewListado.CurrentRow.Cells["total"].Value).ToString("#0.00#");
+            this.lblTotal_Pagado.Text = Convert.ToDecimal(this.dataGridViewListado.CurrentRow.Cells["total"].Value).ToString("#0.00##");
             this.MostrarDetalle();
 
             this.tabControl1.SelectedIndex = 1;
@@ -396,6 +397,7 @@ namespace CapaVista
                 else
                 {
                     bool registrar = true;
+                    int stockActual = 0;
                     // 1 comprobar el el artículo no esté ya en el listado de detalles    
                     foreach (DataRow row in dtDetalle.Rows)
                     {
@@ -404,18 +406,25 @@ namespace CapaVista
                             registrar = false;
                             this.MensajeError("YA se encuentra el artículo en el detalle");
                         }
-                    } // Cantidad a vender <= stock
-                    if (registrar && Convert.ToInt32(txtCantidad.Text)<=Convert.ToInt32(txtStockActual.Text)) // 2 insertar al datagrid si no estaba ya antes
+                    } // Cantidad a vender <= stock ¡OJO MEJOR VOLVER A CONSULTAR EL STOCK EN LA BD!
+                stockActual = Convert.ToInt32(txtStockActual.Text); //<- CHAPUZA, TRAER DE LA BD
+                    // Mejor VOLVER A consultar el stock actual en el momento de añadir. crear spobtener_stock, con iddetalle_ingreso,y stock output
+                    // Podrían existir más ventas concurrentes que resten stock
+                    if (registrar && Convert.ToInt32(txtCantidad.Text) <= stockActual) // 2 insertar al datagrid si no estaba ya antes
                     {
                         decimal subTotal = Convert.ToDecimal(this.txtCantidad.Text) * Convert.ToDecimal(this.txtPrecioVenta.Text)-
                                                 Convert.ToDecimal(this.txtDescuento.Text);
                         totalPagado = totalPagado + subTotal;
-                        this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
+                        this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//totalPagado.ToString("#0.00#");
+
+                        
                         // Agregar ese detalle al datalistadoDetalle
                         DataRow row = this.dtDetalle.NewRow();
                         row["iddetalle_ingreso"] = Convert.ToInt32(txtIdDetalle_ingreso.Text);
                         row["articulo"] = this.textBoxArticulo.Text;
-                        row["cantidad"] = Convert.ToInt32(txtCantidad.Text);
+                        row["cantidad"] = Convert.ToInt32(txtCantidad.Text);                       
+                    
+                        row["stock"] = stockActual - Convert.ToInt32(row["cantidad"]); // Para mostrar el stock disponible que quedaría al guardar
                         row["precio_venta"] = Convert.ToDecimal(txtPrecioVenta.Text);
                         row["descuento"] = Convert.ToDecimal(txtDescuento.Text);
                         row["subtotal"] = subTotal;
@@ -426,6 +435,7 @@ namespace CapaVista
                         {
                             dataListadoDetalle.Columns["iddetalle_ingreso"].ReadOnly = true;
                             dataListadoDetalle.Columns["articulo"].ReadOnly = true;
+                            dataListadoDetalle.Columns["stock"].ReadOnly = true;
                             dataListadoDetalle.Columns["subtotal"].ReadOnly = true;
                         }
                     }
@@ -450,7 +460,7 @@ namespace CapaVista
                 DataRow row = this.dtDetalle.Rows[indiceFila];
                 // Disminuir el total Pagado
                 this.totalPagado = totalPagado - Convert.ToDecimal(row["subtotal"].ToString());
-                this.lblTotal_Pagado.Text = this.totalPagado.ToString("#0.00#");
+                this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//this.totalPagado.ToString("#0.00#");
                 // Removemos la fila
                 this.dtDetalle.Rows.Remove(row);
             }
@@ -464,23 +474,46 @@ namespace CapaVista
         {
             if (dataListadoDetalle.RowCount > 0)
             {
-                if (e.ColumnIndex == dataListadoDetalle.Columns["cantidad"].Index) // si cambia valor en celda de la columna STOCK_inicial
+                decimal cantidad = Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["cantidad"].Value);
+                if (e.ColumnIndex == dataListadoDetalle.Columns["cantidad"].Index ) // si cambia valor en celda de la columna STOCK_inicial                    
                 {
-                    decimal subTotal = Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["cantidad"].Value) * Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["precio_venta"].Value)-
-                                    Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["descuento"].Value);
-                    dataListadoDetalle.Columns["subtotal"].ReadOnly = false;
-                    dataListadoDetalle.Rows[e.RowIndex].Cells["subtotal"].Value = subTotal;
-                    dataListadoDetalle.Columns["subtotal"].ReadOnly = true;
-                    // Recalculo el total pagado sumando todos los subtotales
-                    totalPagado = 0;
-                    foreach (DataGridViewRow row in dataListadoDetalle.Rows)
+                    /* HABRIA QUE VOLVER A CONSULTAR EN LA BD EL STOCK ACTUAL DEL ATICULO, lo siguiente es un mero apaño */
+                    int stockActual = 0;
+                    if (cantidad <= (Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["stock"].Value)))
                     {
-                        totalPagado = totalPagado + Convert.ToDecimal(row.Cells["subtotal"].Value);
-                    }
+                        decimal subTotal = cantidad * Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["precio_venta"].Value) -
+                                        Convert.ToDecimal(dataListadoDetalle.Rows[e.RowIndex].Cells["descuento"].Value);
+                        dataListadoDetalle.Columns["stock"].ReadOnly = false;
+//                        dataListadoDetalle.Rows[e.RowIndex].Cells["stock"].Value = stockActual;
+                        dataListadoDetalle.Columns["stock"].ReadOnly = true;
+                        dataListadoDetalle.Columns["subtotal"].ReadOnly = false;
+                        dataListadoDetalle.Rows[e.RowIndex].Cells["subtotal"].Value = subTotal;
+                        dataListadoDetalle.Columns["subtotal"].ReadOnly = true;
+                        // Recalculo el total pagado sumando todos los subtotales
+                        totalPagado = 0;
+                        foreach (DataGridViewRow row in dataListadoDetalle.Rows)
+                        {
+                            totalPagado = totalPagado + Convert.ToDecimal(row.Cells["subtotal"].Value);
+                        }
 
-                    this.lblTotal_Pagado.Text = totalPagado.ToString("#0.00#");
+                        this.lblTotal_Pagado.Text = string.Format("{0:n}", totalPagado);//totalPagado.ToString("#0.00#");
+                    }
+                    else
+                    {
+                        MensajeError("No hay Stock Suficiente");
+                    }
                 }
             }
+        }
+        // No permitir entrada de carácteres que no sean números, permite números y teclas de control (borrar)
+        private void textBox_KeyPressInt(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar);
+        }
+
+        private void textBox_KeyPressDecimal(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = !Char.IsDigit(e.KeyChar) && !Char.IsControl(e.KeyChar) && !e.KeyChar.ToString().Equals(",");
         }
     }
 }

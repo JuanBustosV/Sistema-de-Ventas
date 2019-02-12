@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.buttonBuscarArt = new System.Windows.Forms.Button();
             this.txtIdDetalle_ingreso = new System.Windows.Forms.TextBox();
             this.labelArticulo = new System.Windows.Forms.Label();
@@ -42,6 +42,7 @@
             this.lblTotalPag = new System.Windows.Forms.Label();
             this.dataListadoDetalle = new System.Windows.Forms.DataGridView();
             this.groupBoxDetalles = new System.Windows.Forms.GroupBox();
+            this.lblStock = new System.Windows.Forms.Label();
             this.txtDescuento = new System.Windows.Forms.TextBox();
             this.labelDescuento = new System.Windows.Forms.Label();
             this.txtStockActual = new System.Windows.Forms.TextBox();
@@ -216,6 +217,7 @@
             // 
             // groupBoxDetalles
             // 
+            this.groupBoxDetalles.Controls.Add(this.lblStock);
             this.groupBoxDetalles.Controls.Add(this.txtDescuento);
             this.groupBoxDetalles.Controls.Add(this.labelDescuento);
             this.groupBoxDetalles.Controls.Add(this.txtStockActual);
@@ -239,6 +241,15 @@
             this.groupBoxDetalles.TabIndex = 26;
             this.groupBoxDetalles.TabStop = false;
             // 
+            // lblStock
+            // 
+            this.lblStock.AutoSize = true;
+            this.lblStock.Location = new System.Drawing.Point(143, 63);
+            this.lblStock.Name = "lblStock";
+            this.lblStock.Size = new System.Drawing.Size(38, 13);
+            this.lblStock.TabIndex = 30;
+            this.lblStock.Text = "Stock:";
+            // 
             // txtDescuento
             // 
             this.txtDescuento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -248,6 +259,7 @@
             this.txtDescuento.Name = "txtDescuento";
             this.txtDescuento.Size = new System.Drawing.Size(65, 20);
             this.txtDescuento.TabIndex = 37;
+            this.txtDescuento.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressDecimal);
             // 
             // labelDescuento
             // 
@@ -262,8 +274,8 @@
             // 
             this.txtStockActual.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.txtStockActual.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStockActual.Location = new System.Drawing.Point(169, 61);
-            this.txtStockActual.MaxLength = 16;
+            this.txtStockActual.Location = new System.Drawing.Point(187, 61);
+            this.txtStockActual.MaxLength = 8;
             this.txtStockActual.Name = "txtStockActual";
             this.txtStockActual.Size = new System.Drawing.Size(65, 20);
             this.txtStockActual.TabIndex = 35;
@@ -333,6 +345,7 @@
             this.txtPrecioVenta.Name = "txtPrecioVenta";
             this.txtPrecioVenta.Size = new System.Drawing.Size(100, 20);
             this.txtPrecioVenta.TabIndex = 26;
+            this.txtPrecioVenta.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressDecimal);
             // 
             // lblPrecioVenta
             // 
@@ -348,10 +361,11 @@
             this.txtCantidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
             this.txtCantidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCantidad.Location = new System.Drawing.Point(72, 61);
-            this.txtCantidad.MaxLength = 16;
+            this.txtCantidad.MaxLength = 6;
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(65, 20);
             this.txtCantidad.TabIndex = 24;
+            this.txtCantidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressInt);
             // 
             // lblCantidad
             // 
@@ -390,6 +404,7 @@
             this.textBoxIva.Name = "textBoxIva";
             this.textBoxIva.Size = new System.Drawing.Size(48, 20);
             this.textBoxIva.TabIndex = 24;
+            this.textBoxIva.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressDecimal);
             // 
             // textBoxCorrelativo
             // 
@@ -400,6 +415,7 @@
             this.textBoxCorrelativo.Name = "textBoxCorrelativo";
             this.textBoxCorrelativo.Size = new System.Drawing.Size(115, 20);
             this.textBoxCorrelativo.TabIndex = 23;
+            this.textBoxCorrelativo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressInt);
             // 
             // dateTimePickerFecha
             // 
@@ -489,6 +505,7 @@
             this.textBoxSerie.Name = "textBoxSerie";
             this.textBoxSerie.Size = new System.Drawing.Size(48, 20);
             this.textBoxSerie.TabIndex = 11;
+            this.textBoxSerie.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPressInt);
             // 
             // labelComprobante
             // 
@@ -638,37 +655,37 @@
             this.dataGridViewListado.AllowUserToAddRows = false;
             this.dataGridViewListado.AllowUserToDeleteRows = false;
             this.dataGridViewListado.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewListado.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewListado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewListado.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Eliminar});
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewListado.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewListado.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewListado.Location = new System.Drawing.Point(6, 99);
             this.dataGridViewListado.MultiSelect = false;
             this.dataGridViewListado.Name = "dataGridViewListado";
             this.dataGridViewListado.ReadOnly = true;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewListado.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewListado.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewListado.Size = new System.Drawing.Size(877, 320);
             this.dataGridViewListado.TabIndex = 7;
@@ -842,5 +859,6 @@
         private System.Windows.Forms.TextBox txtDescuento;
         private System.Windows.Forms.Label labelDescuento;
         private System.Windows.Forms.TextBox txtStockActual;
+        private System.Windows.Forms.Label lblStock;
     }
 }
