@@ -238,5 +238,14 @@ namespace CapaVista
             frm.Show();
             frm.Idtrabajador = Convert.ToInt32(this.Idtrabajador);
         }
+
+        private void stockDeArtículosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Consultas.FrmConsulta_Stock_Articulos frm = new Consultas.FrmConsulta_Stock_Articulos
+            {
+                MdiParent = this
+            };
+            frm.Show();
+        }
     }
 }

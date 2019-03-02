@@ -312,5 +312,27 @@ namespace CapaModelo
             }
             return DtResultado;
         }
+        // Método Mostrar
+        public DataTable StockArticulos()
+        {
+            DataTable DtResultado = new DataTable("articulo"); // Nombre de la tabla
+            SqlConnection SqlCon = new SqlConnection();
+            try
+            {
+                SqlCon.ConnectionString = ConexionDB.Cn;
+                SqlCommand SqlCmd = new SqlCommand();
+                SqlCmd.Connection = SqlCon;
+                SqlCmd.CommandText = "spstock_articulos";
+                SqlCmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataAdapter SqlDat = new SqlDataAdapter(SqlCmd);
+                SqlDat.Fill(DtResultado); // Rellena DtResultado con lo que se obtiene del comando (SqlCmd)
+            }
+            catch (Exception ex)
+            {
+                DtResultado = null;
+            }
+            return DtResultado;
+        }
     }
 }

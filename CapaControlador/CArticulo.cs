@@ -78,5 +78,12 @@ namespace CapaControlador
 
             return Obj.BuscarNombre(Obj);
         }
+
+        // Método StockArticulos que llama al método Mostrar de la clase MArticulo
+        // de la CapaModelo
+        public static DataTable StockArticulos()
+        {
+            return new MArticulo().StockArticulos();
+        }
     }
 }

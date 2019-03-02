@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CapaVista.Properties {
+namespace CapaModelo.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -28,9 +28,9 @@ namespace CapaVista.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=XONE\\SQLEXPRESS;Initial Catalog=dbventas;User ID=jbustos;Password=Abc" +
             "d1234")]
-        public string dbventasConnectionString {
+        public string cn {
             get {
-                return ((string)(this["dbventasConnectionString"]));
+                return ((string)(this["cn"]));
             }
         }
     }

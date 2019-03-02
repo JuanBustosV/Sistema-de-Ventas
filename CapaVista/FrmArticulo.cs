@@ -379,5 +379,11 @@ namespace CapaVista
             FrmVistaCategoria_Articulo form = new FrmVistaCategoria_Articulo();
             form.ShowDialog();
         }
+
+        private void buttonImprimir_Click(object sender, EventArgs e)
+        {
+            FrmReporteArticulos frm = new FrmReporteArticulos();
+            frm.ShowDialog();
+        }
     }
 }
